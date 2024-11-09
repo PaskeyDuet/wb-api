@@ -1,27 +1,14 @@
+import { BoxTariffsCreationT, BoxTariffT } from "#types.ts";
 import { Table, Model, Column, DataType } from "sequelize-typescript";
-import type { PartialBy } from "@sequelize/utils";
-
-//TODO: Add visited property
-type PackageTariffsT = {
-    id: number;
-    boxDeliveryAndStorageExpr: string;
-    boxDeliveryBase: string;
-    boxDeliveryLiter: string;
-    boxStorageBase: string;
-    boxStorageLiter: string;
-    warehouseName: string;
-};
-
-type PackageTariffsCreationT = PartialBy<PackageTariffsT, "id">;
 
 @Table({
-    timestamps: false,
-    tableName: "package_tariffs",
-    modelName: "PackageTariffs",
+    timestamps: true,
+    tableName: "box_tariffs",
+    modelName: "BoxTariffs",
 })
 
 //TODO: Add more accurate types to Columns
-export default class PackageTariffs extends Model<PackageTariffsT, PackageTariffsCreationT> {
+export default class BoxTariffs extends Model<BoxTariffT, BoxTariffsCreationT> {
     @Column({
         type: DataType.INTEGER,
         autoIncrement: true,

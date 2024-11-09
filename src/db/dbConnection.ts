@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
-import type { Config } from "#config.ts";
-import PackageTariffs from "./models/PackageTarrifs.ts";
+import PackageTariffs from "./models/BoxTarrifs.ts";
+import { Config } from "#types.ts";
 
 export default (env: Config) => {
     try {
@@ -9,7 +9,7 @@ export default (env: Config) => {
             username: env.DB_USERNAME,
             password: env.DB_PASSWORD,
             host: env.DB_HOST,
-            port: 5433,
+            port: Number(env.DB_PORT),
         };
 
         return new Sequelize({
