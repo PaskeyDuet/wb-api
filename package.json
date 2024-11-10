@@ -23,6 +23,7 @@
     "google-spreadsheet": "^4.1.4",
     "knex": "^3.0.1",
     "log4js": "^6.9.1",
+    "moment": "^2.30.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.5",

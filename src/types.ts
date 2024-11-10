@@ -8,8 +8,10 @@ type BoxTariffT = {
     boxStorageBase: string;
     boxStorageLiter: string;
     warehouseName: string;
+    createdAt: string;
+    updatedAt: string;
 };
-type BoxTariffsCreationT = PartialBy<BoxTariffT, "id">;
+type BoxTariffsCreationT = PartialBy<BoxTariffT, "id" | "createdAt" | "updatedAt">;
 
 type BoxTariffsByWarehouseResDataT = {
     dtNexBox: string;

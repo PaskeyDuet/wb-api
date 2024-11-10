@@ -1,4 +1,5 @@
 import { BoxTariffsCreationT, BoxTariffT } from "#types.ts";
+import { CreationOptional } from "sequelize";
 import { Table, Model, Column, DataType } from "sequelize-typescript";
 
 @Table({
@@ -45,4 +46,6 @@ export default class BoxTariffs extends Model<BoxTariffT, BoxTariffsCreationT> {
         type: DataType.STRING,
     })
     declare warehouseName: string;
+    declare createdAt: CreationOptional<Date>;
+    declare updatedAt: CreationOptional<Date>;
 }

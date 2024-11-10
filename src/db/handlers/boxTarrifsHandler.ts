@@ -1,9 +1,24 @@
 import BoxTariffs from "#db/models/BoxTarrifs.ts";
 import { BoxTariffT } from "#types.ts";
-import { where } from "sequelize";
+import { Op } from "sequelize";
+import moment from "moment";
 
 //TODO: create universal class to manipulate models
 export default {
+    getAllTodayTariffsObjs: async () => {
+        const todayStart = moment().startOf("day").toDate();
+        const todayEnd = moment().endOf("day").toDate();
+        const tariffsObjs = await BoxTariffs.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: todayStart, // Больше или равно началу дня
+                    [Op.lte]: todayEnd, // Меньше или равно концу дня
+                },
+            },
+            attributes: { exclude: ["createdAt", "updatedAt", "id"] },
+        });
+        return tariffsObjs.map((obj) => obj.get());
+    },
     findLastTariff: async () => {
         return await BoxTariffs.findOne({ order: [["createdAt", "DESC"]] });
     },
