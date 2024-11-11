@@ -45,4 +45,7 @@ docker-compose build --no-cache
 docker-compose up
 ```
 
-### Изменить частоту обновления базы данных и таблиц можно в директории src/updaters в файле updateBoxTariff.ts. dbUpdateInterval отвечает за обновление базы данных, sheetsUpdateInterval отвечает за частоту обновления гугл таблиц.
+### Изменить частоту обновления базы данных и таблиц можно в директории src/updaters в файле _`updateBoxTariff.ts`_.
+
+-   `dbUpdateInterval` отвечает за обновление базы данных,
+-   `sheetsUpdateInterval` отвечает за частоту обновления гугл таблиц.
