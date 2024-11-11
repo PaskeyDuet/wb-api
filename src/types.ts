@@ -64,6 +64,7 @@ type BoxTariffsByWarehouseResDataT = {
 type BoxTarrifsResponseT = {
     response: { data: BoxTariffsByWarehouseResDataT };
 };
+
 /**
  * Конфигурационные параметры приложения.
  *
