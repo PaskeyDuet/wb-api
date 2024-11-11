@@ -1,5 +1,5 @@
-import BoxTariffs from "#db/models/BoxTarrifs.ts";
-import { BoxTariffT } from "#types.ts";
+import BoxTariffs from "#db/models/BoxTarrifs.js";
+import type { BoxTariffT } from "#types.js";
 import { Op } from "sequelize";
 import moment from "moment";
 

@@ -1,19 +1,18 @@
-import requestBoxTarrifs from "#dataRequester/requestBoxTarrifs.ts";
-import boxTarrifsHandler from "#db/handlers/boxTarrifsHandler.ts";
-import updateDbBoxTariffs from "./updateDbBoxTariffs.ts";
-import { sortBoxTariffByExpr } from "./updateHelpers.ts";
-import updateSheetsBoxTarrifs from "./updateSheetsBoxTarrifs.ts";
+import requestBoxTarrifs from "#dataRequester/requestBoxTarrifs.js";
+import boxTarrifsHandler from "#db/handlers/boxTarrifsHandler.js";
+import updateDbBoxTariffs from "./updateDbBoxTariffs.js";
+import { sortBoxTariffByExpr } from "./updateHelpers.js";
+import updateSheetsBoxTarrifs from "./updateSheetsBoxTarrifs.js";
 
 //TODO: updates can be formed dynamically from folders which has update functions
-const dbUpdateInterval = 1000 * 500;
-const sheetsUpdateInterval = 1000 * 5;
+const dbUpdateInterval = 1000 * 60 * 60; //hour
+const sheetsUpdateInterval = 1000 * 60 * 60 * 24; //day
 
 export default async function () {
     setInterval(async () => {
         await updateDb();
     }, dbUpdateInterval);
-    const interval = setInterval(async () => {
-        clearInterval(interval);
+    setInterval(async () => {
         await updateSheets();
     }, sheetsUpdateInterval);
 }

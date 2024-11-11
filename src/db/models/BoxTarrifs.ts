@@ -1,5 +1,5 @@
-import { BoxTariffsCreationT, BoxTariffT } from "#types.ts";
-import { CreationOptional } from "sequelize";
+import type { BoxTariffsCreationT, BoxTariffT } from "#types.js";
+import type { CreationOptional } from "sequelize";
 import { Table, Model, Column, DataType } from "sequelize-typescript";
 
 @Table({

@@ -1,6 +1,6 @@
-import server from "#server.ts";
-import env from "#config.ts";
-import updateBoxTariffs from "#updaters/updateBoxTariffs.ts";
+import server from "#server.js";
+import env from "#config.js";
+import updateBoxTariffs from "#updaters/updateBoxTariffs.js";
 
 (async () => {
     try {

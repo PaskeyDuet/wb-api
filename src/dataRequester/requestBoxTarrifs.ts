@@ -1,8 +1,8 @@
-import env from "#config.ts";
-import BoxTariff from "#db/models/BoxTarrifs.ts";
-import formYMDDate from "#helpers/formYMDDate.ts";
-import wbApiReqDate from "#helpers/formYMDDate.ts";
-import { BoxTariffsByWarehouseResDataT, BoxTarrifsResponseT } from "#types.ts";
+import env from "#config.js";
+import BoxTariff from "#db/models/BoxTarrifs.js";
+import formYMDDate from "#helpers/formYMDDate.js";
+import wbApiReqDate from "#helpers/formYMDDate.js";
+import { BoxTariffsByWarehouseResDataT, BoxTarrifsResponseT } from "#types.js";
 import axios from "axios";
 import path from "node:path";
 

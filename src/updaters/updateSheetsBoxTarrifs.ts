@@ -1,40 +1,41 @@
-import env from "#config.ts";
-import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
+import env from "#config.js";
+import { GoogleSpreadsheet, type GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
-import uppercaseLetters from "#helpers/englishUpperLetters.ts";
-import { BoxTariffsByWarehouseResDataT, BoxTariffT } from "#types.ts";
-import formYMDDate from "#helpers/formYMDDate.ts";
+import uppercaseLetters from "#helpers/englishUpperLetters.js";
+import type { BoxTariffT } from "#types.js";
+import formYMDDate from "#helpers/formYMDDate.js";
+import { delay } from "./updateHelpers.js";
 
 //TODO: create extended from GoogleSpreadsheet class with additional methods
 //It is better to use classes to save table inner relations (f.e. Map with letters linked with keys)
 //TODO: Move ids and service account data to db
-const spreadSheetsIDs = [
-    "1N01WvfoZ6oObA81ESr5a9PnL0Q5hwPj7Ct9IU09Y1mE",
-    "1rqfWXHNYf43FvX0VgNZLLH86gSpZqwc0f_89AST4XmU",
-    "16MWAy5yDbjWhT81qlo461d3D7hg9BssSzhOWewAvhag",
-];
+const spreadSheetsIDs = env.SPREADSHEET_IDS.split("|");
 const sheetName = "stocks_coefs";
+
 const serviceAccountAuth = new JWT({
     email: env.SERVICE_ACCOUNT_EMAIL,
     key: env.SERVICE_ACCOUNT_PRIVATE_KEY.split(String.raw`\n`).join("\n"),
     scopes: [env.SERVICE_ACCOUNT_SCOPE],
 });
 
-export default async function (boxTarrifsObjs: BoxTariffT[]) {
+export default async function updateSheets(boxTarrifsObjs: BoxTariffT[]): Promise<void> {
     try {
-        const updatePromises = [];
         for (const id of spreadSheetsIDs) {
-            const updatePromise = sheetUpdater(id, serviceAccountAuth, boxTarrifsObjs);
-            updatePromises.push(updatePromise);
+            console.log(`Начало обновления таблицы с ID: ${id}`);
+            await sheetUpdater(id, serviceAccountAuth, boxTarrifsObjs);
+            console.log(`Таблица с ID ${id} обновлена.`);
+            await delay(61000); //FIXME: after 61sec updates quota
         }
-        const updateRes = await Promise.all(updatePromises);
+        console.log("Все таблицы успешно обновлены.");
     } catch (error) {
+        console.error("Ошибка при обновлении таблиц:", error);
         throw new Error("Error updating sheets box tariffs");
     }
 }
 //TODO: it's necessary to unite db and sheet updaters to create same logic but with different handlers
 //F.E. if no data, if new date etc.
 //TODO: Make sheetUpdater create less reading operations - quota is limited
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 async function sheetUpdater(spreadsheetId: string, serviceAccount: JWT, objs: Object[]) {
     try {
         const h = googleSpreadsheetHelpers;
@@ -60,7 +61,7 @@ async function sheetUpdater(spreadsheetId: string, serviceAccount: JWT, objs: Ob
 const googleSpreadsheetHelpers = {
     loadGoogleSheet: async (spreadSheetsID: string, serviceAccount: JWT): Promise<GoogleSpreadsheet> => {
         try {
-            const doc = new GoogleSpreadsheet(spreadSheetsIDs[0], serviceAccount);
+            const doc = new GoogleSpreadsheet(spreadSheetsID, serviceAccount);
             await doc.loadInfo();
             return doc;
         } catch (error) {
@@ -79,6 +80,7 @@ const googleSpreadsheetHelpers = {
         const data = await sheet.getCellsInRange(`A${counter}:Z${counter}`);
         return data ? false : true;
     },
+    // biome-ignore lint/complexity/noBannedTypes: <explanation>
     fillTopCellsWithKeysOrValues: async (sheet: GoogleSpreadsheetWorksheet, obj: Object, counter: number, mode: "keys" | "values") => {
         try {
             const objKeys = Object[mode](obj);
@@ -113,7 +115,7 @@ const googleSpreadsheetHelpers = {
     },
     firstEmptyCellNumber: async (sheet: GoogleSpreadsheetWorksheet): Promise<number> => {
         let counter = 1;
-        await sheet.loadCells(`A1`);
+        await sheet.loadCells("A1");
         let cellData = sheet.getCellByA1("A1");
 
         while (cellData.value !== null) {

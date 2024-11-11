@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
-import PackageTariffs from "./models/BoxTarrifs.ts";
-import { Config } from "#types.ts";
+import PackageTariffs from "./models/BoxTarrifs.js";
+import type { Config } from "#types.js";
 
 export default (env: Config) => {
     try {

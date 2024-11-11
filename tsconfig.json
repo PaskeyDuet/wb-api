@@ -4,7 +4,6 @@
 		"module": "NodeNext",
 		"target": "es2017",
 		"moduleResolution": "NodeNext",
-		"allowImportingTsExtensions": true,
 		"baseUrl": "./",
 		"paths": {
 			"#*": [
@@ -14,7 +13,7 @@
 		"esModuleInterop": true,
 		"allowJs": true,
 		"checkJs": true,
-		"noEmit": true,
+		"outDir": "./dist",
 		"skipLibCheck": true,
 		"experimentalDecorators": true
 	},

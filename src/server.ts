@@ -1,8 +1,7 @@
 import express, { type Express } from "express";
-import type { Config } from "#types.ts";
-import dbConnection from "#db/dbConnection.ts";
+import type { Config } from "#types.js";
+import dbConnection from "#db/dbConnection.js";
 import type { Sequelize } from "sequelize-typescript";
-import BoxTariffs from "#db/models/BoxTarrifs.ts";
 
 export default async function (env: Config) {
     try {
