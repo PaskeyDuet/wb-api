@@ -9,9 +9,9 @@ import formYMDDate from "#helpers/formYMDDate.ts";
 //It is better to use classes to save table inner relations (f.e. Map with letters linked with keys)
 //TODO: Move ids and service account data to db
 const spreadSheetsIDs = [
+    "1N01WvfoZ6oObA81ESr5a9PnL0Q5hwPj7Ct9IU09Y1mE",
     "1rqfWXHNYf43FvX0VgNZLLH86gSpZqwc0f_89AST4XmU",
-    // "1N01WvfoZ6oObA81ESr5a9PnL0Q5hwPj7Ct9IU09Y1mE",
-    // "16MWAy5yDbjWhT81qlo461d3D7hg9BssSzhOWewAvhag",
+    "16MWAy5yDbjWhT81qlo461d3D7hg9BssSzhOWewAvhag",
 ];
 const sheetName = "stocks_coefs";
 const serviceAccountAuth = new JWT({
@@ -22,9 +22,11 @@ const serviceAccountAuth = new JWT({
 
 export default async function (boxTarrifsObjs: BoxTariffT[]) {
     try {
-        const updatePromises = spreadSheetsIDs.map(async (id) => {
-            return sheetUpdater(id, serviceAccountAuth, boxTarrifsObjs);
-        });
+        const updatePromises = [];
+        for (const id of spreadSheetsIDs) {
+            const updatePromise = sheetUpdater(id, serviceAccountAuth, boxTarrifsObjs);
+            updatePromises.push(updatePromise);
+        }
         const updateRes = await Promise.all(updatePromises);
     } catch (error) {
         throw new Error("Error updating sheets box tariffs");
@@ -48,7 +50,6 @@ async function sheetUpdater(spreadsheetId: string, serviceAccount: JWT, objs: Ob
             counter = await h.fillTopCellsWithKeysOrValues(sheet, objUnit, counter, "keys");
         }
         const rowObjs = objs.map(h.createRowObject);
-        const letterRange = h.rangeByObjKeys(objUnit);
         await h.addCurrentDateCell(sheet);
         await sheet.addRows(rowObjs);
     } catch (error) {

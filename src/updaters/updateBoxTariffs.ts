@@ -6,13 +6,14 @@ import updateSheetsBoxTarrifs from "./updateSheetsBoxTarrifs.ts";
 
 //TODO: updates can be formed dynamically from folders which has update functions
 const dbUpdateInterval = 1000 * 500;
-const sheetsUpdateInterval = 1000 * 61;
+const sheetsUpdateInterval = 1000 * 5;
 
 export default async function () {
     setInterval(async () => {
         await updateDb();
     }, dbUpdateInterval);
-    setInterval(async () => {
+    const interval = setInterval(async () => {
+        clearInterval(interval);
         await updateSheets();
     }, sheetsUpdateInterval);
 }
